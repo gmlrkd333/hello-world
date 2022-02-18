@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('join/', views.join),
     path('login/', views.login),
+    path('calculate/', views.calculate)
 ]

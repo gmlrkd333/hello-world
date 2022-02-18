@@ -1,9 +1,8 @@
 from django.contrib.auth import authenticate
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
 from .models import MyUser
+import yolo
 
 
 @csrf_exempt
@@ -35,4 +34,8 @@ def login(request):
             return JsonResponse({'code': '1001', 'msg': '로그인실패입니다.'}, status=200)
 
 
-dfsfsdfdsfsdfsd
+@csrf_exempt
+def calculate(request):
+    if request.method == 'POST':
+        image = request.POST.get('image', '')
+
