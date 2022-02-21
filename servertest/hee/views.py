@@ -2,6 +2,8 @@ from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import MyUser
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 import yolo
 
 
@@ -37,5 +39,10 @@ def login(request):
 @csrf_exempt
 def calculate(request):
     if request.method == 'POST':
-        image = request.POST.get('image', '')
-
+        file = request.FILES['proFile']
+        print(type(file))
+        print(str(file))
+        print(file)
+        path = default_storage.save(str(file), ContentFile(file.read()))
+        print("성공")
+        return JsonResponse({'code': '0000', 'msg': '회원가입 성공입니다.'}, status=200)
