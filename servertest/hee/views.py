@@ -40,9 +40,6 @@ def login(request):
 def calculate(request):
     if request.method == 'POST':
         file = request.FILES['proFile']
-        print(type(file))
-        print(str(file))
-        print(file)
-        path = default_storage.save(str(file), ContentFile(file.read()))
-        print("성공")
+        default_storage.save(str(file), ContentFile(file.read()))
+        yolo.process(str(file))
         return JsonResponse({'code': '0000', 'msg': '회원가입 성공입니다.'}, status=200)

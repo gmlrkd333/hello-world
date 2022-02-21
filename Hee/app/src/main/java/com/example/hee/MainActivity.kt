@@ -52,7 +52,6 @@ class MainActivity : AppCompatActivity() {
     val PERMISSIONS_REQUEST = 100
 
     // Request Code
-    private val BUTTON2 = 200
     private val BUTTON3 = 300
 
     // 원본 사진이 저장되는 Uri
@@ -65,12 +64,6 @@ class MainActivity : AppCompatActivity() {
 
         checkPermissions(PERMISSIONS, PERMISSIONS_REQUEST)
 
-        binding.btn2.setOnClickListener {
-            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            takePictureIntent.resolveActivity(packageManager)?.also {
-                startActivityForResult(takePictureIntent, BUTTON2)
-            }
-        }
         binding.btn3.setOnClickListener {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             photoFile = File(
@@ -81,13 +74,11 @@ class MainActivity : AppCompatActivity() {
                 },
                 newJpgFileName()
             )
-
             photoUri = FileProvider.getUriForFile(
                 this,
                 "com.example.hee.fileprovider",
                 photoFile
             )
-
 
             takePictureIntent.resolveActivity(packageManager)?.also {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
@@ -107,11 +98,7 @@ class MainActivity : AppCompatActivity() {
 
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                BUTTON2 -> {
-                    val imageBitmap = data?.extras?.get("data") as Bitmap
-                    saveBitmapAsJPGFile(imageBitmap)
-                    binding.imageView.setImageBitmap(imageBitmap)
-                }
+
                 BUTTON3 -> {
 
                     val file = File(photoFile.absolutePath)
@@ -146,25 +133,6 @@ class MainActivity : AppCompatActivity() {
         return "${filename}.jpg"
     }
 
-    private fun saveBitmapAsJPGFile(bitmap: Bitmap) {
-        val path = File(filesDir, "image")
-
-        if (!path.exists()) {
-            path.mkdirs()
-        }
-        val file = File(path, newJpgFileName())
-
-        var imageFile: OutputStream? = null
-        try {
-            file.createNewFile()
-            imageFile = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageFile)
-            imageFile.close()
-            Toast.makeText(this, file.absolutePath, Toast.LENGTH_LONG).show()
-        } catch (e: Exception) {
-            null
-        }
-    }
 
     private fun checkPermissions(permissions: Array<String>, permissionsRequest: Int): Boolean {
         val permissionList: MutableList<String> = mutableListOf()
