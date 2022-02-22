@@ -28,7 +28,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="a0b617d3-9c1c-4e4b-8731-70e1af1b5c28">
-      <console name="Connection" type="STANDARD" schema="main" session="Main"><![CDATA[select * from user]]></console>
+      <console name="Connection" type="STANDARD" schema="main" session="Main"><![CDATA[select * from django_migrations]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
