@@ -106,11 +106,13 @@ class MainActivity : AppCompatActivity() {
                     val image = MultipartBody.Part.createFormData("proFile", file.name, requestFile)
                     var picture = retrofit.create(Picture::class.java)
 
+                    println(image)
+                    println(image::class.java.simpleName)
                     picture.requestPicture(image).enqueue(object : Callback<Login> {
                         override fun onResponse(call: Call<Login>, response: Response<Login>) {
                             var login = response.body()
                             if (login?.code == "0000") {
-                                Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(applicationContext, "성공 "+ login?.msg, Toast.LENGTH_SHORT).show()
                             } else {
                                 Toast.makeText(applicationContext, "실패", Toast.LENGTH_SHORT).show()
                             }

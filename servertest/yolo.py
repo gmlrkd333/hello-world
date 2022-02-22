@@ -21,6 +21,7 @@ layer_names = net.getLayerNames()
 output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
+
 def process(image):
     img = cv2.imread(image)
     img = cv2.resize(img, None, fx=0.4, fy=0.4)
@@ -67,8 +68,8 @@ def process(image):
         sum_calorie += result[0][0]
     print(sum_calorie)
 
-    cv2.imshow("Image", img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.imshow("Image", img)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
 
-    return sum
+    return sum_calorie
