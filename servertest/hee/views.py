@@ -41,5 +41,5 @@ def calculate(request):
     if request.method == 'POST':
         file = request.FILES['proFile']
         default_storage.save(str(file), ContentFile(file.read()))
-        yolo.process(str(file))
-        return JsonResponse({'code': '0000', 'msg': '회원가입 성공입니다.'}, status=200)
+        sum_calorie = yolo.process(str(file))
+        return JsonResponse({'code': '0000', 'msg': sum_calorie}, status=200)

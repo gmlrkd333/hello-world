@@ -1,10 +1,18 @@
-
+import pymysql
 import cv2
 import numpy as np
 
+db = pymysql.connect(
+    user='root',
+    passwd='1234',
+    host='localhost',
+    db='food',
+    charset='utf8'
+)
+cursor = db.cursor()
 
 # YOLO 가중치 파일과 CFG 파일 로드
-net = cv2.dnn.readNet("yolov3_final.weights","yolov3.cfg")
+net = cv2.dnn.readNet("yolov3_final_6.weights","yolov3.cfg")
 # YOLO NETWORK 재구성
 classes = []
 with open("obj.names", "r") as f:
@@ -40,6 +48,7 @@ def process(image):
                 boxes.append([x, y, w, h])
                 confidences.append(float(confidence))
                 class_ids.append(class_id)
+    foods = []
     indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
     font = cv2.FONT_HERSHEY_PLAIN
     for i in range(len(boxes)):
@@ -49,6 +58,17 @@ def process(image):
             color = colors[i]
             cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
             cv2.putText(img, label, (x, y + 30), font, 3, color, 3)
+            foods.append(class_ids[i])
+    sum_calorie = 0
+    sql = "select calorie from foods where id = %s"
+    for i in range(len(foods)):
+        cursor.execute(sql, foods[i])
+        result = cursor.fetchall()
+        sum_calorie += result[0][0]
+    print(sum_calorie)
+
     cv2.imshow("Image", img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+    return sum
