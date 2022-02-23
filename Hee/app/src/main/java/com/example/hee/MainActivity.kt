@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -30,17 +32,14 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
     // ViewBinding
-    lateinit var binding: ActivityMainBinding
     lateinit var photoFile: File
 
     // Permisisons
@@ -58,13 +57,11 @@ class MainActivity : AppCompatActivity() {
     private var photoUri: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(R.layout.activity_main)
 
         checkPermissions(PERMISSIONS, PERMISSIONS_REQUEST)
 
-        binding.btn3.setOnClickListener {
+        btn3.setOnClickListener {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             photoFile = File(
                 File("${filesDir}/image").apply {
@@ -113,6 +110,9 @@ class MainActivity : AppCompatActivity() {
                             var login = response.body()
                             if (login?.code == "0000") {
                                 Toast.makeText(applicationContext, "성공 "+ login?.msg, Toast.LENGTH_SHORT).show()
+                                val imageBytes = Base64.decode(login?.img, 0)
+                                val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                                imageView.setImageBitmap(image)
                             } else {
                                 Toast.makeText(applicationContext, "실패", Toast.LENGTH_SHORT).show()
                             }

@@ -1,6 +1,7 @@
 import pymysql
 import cv2
 import numpy as np
+import base64
 
 db = pymysql.connect(
     user='root',
@@ -68,8 +69,10 @@ def process(image):
         sum_calorie += result[0][0]
     print(sum_calorie)
 
+    img_str = base64.b64encode(cv2.imencode('.jpg', img)[1]).decode()
+
     #cv2.imshow("Image", img)
     #cv2.waitKey(0)
     #cv2.destroyAllWindows()
 
-    return sum_calorie
+    return sum_calorie, img_str
