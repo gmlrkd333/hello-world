@@ -1,9 +1,10 @@
 from django.contrib.auth import authenticate
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
 from .models import MyUser
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+import yolo
 
 
 @csrf_exempt
@@ -33,3 +34,14 @@ def login(request):
         else:
             print("실패")
             return JsonResponse({'code': '1001', 'msg': '로그인실패입니다.'}, status=200)
+
+
+@csrf_exempt
+def calculate(request):
+    if request.method == 'POST':
+        file = request.FILES['proFile']
+        default_storage.save(str(file), ContentFile(file.read()))
+        print(file)
+        print(type(file))
+        sum_calorie, img = yolo.process(str(file))
+        return JsonResponse({'code': '0000', 'msg': str(sum_calorie), 'img': img},  status=200)
