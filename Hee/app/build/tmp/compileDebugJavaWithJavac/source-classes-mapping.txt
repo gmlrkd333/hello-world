@@ -1,0 +1,4 @@
+com/example/hee/BuildConfig.java
+ com.example.hee.BuildConfig
+com/example/hee/databinding/ActivityMainBinding.java
+ com.example.hee.databinding.ActivityMainBinding
