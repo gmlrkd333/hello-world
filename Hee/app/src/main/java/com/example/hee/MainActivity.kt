@@ -113,6 +113,7 @@ class MainActivity : AppCompatActivity() {
                                 val imageBytes = Base64.decode(login?.img, 0)
                                 val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                                 imageView.setImageBitmap(image)
+                                calorie.text = login?.msg
                             } else {
                                 Toast.makeText(applicationContext, "실패", Toast.LENGTH_SHORT).show()
                             }
