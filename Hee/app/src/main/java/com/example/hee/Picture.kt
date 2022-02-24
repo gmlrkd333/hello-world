@@ -11,5 +11,5 @@ interface Picture {
     @POST("/calculate/")
     fun requestPicture(
         @Part image : MultipartBody.Part
-    ) : Call<Login>
+    ) : Call<Cal>
 }

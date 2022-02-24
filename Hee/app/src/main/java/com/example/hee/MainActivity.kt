@@ -50,9 +50,6 @@ class MainActivity : AppCompatActivity() {
     )
     val PERMISSIONS_REQUEST = 100
 
-    // Request Code
-    private val BUTTON3 = 300
-
     // 원본 사진이 저장되는 Uri
     private var photoUri: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
             takePictureIntent.resolveActivity(packageManager)?.also {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-                startActivityForResult(takePictureIntent, BUTTON3)
+                startActivityForResult(takePictureIntent, 0)
             }
         }
 
@@ -94,39 +91,30 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
+            val file = File(photoFile.absolutePath)
+            val requestFile = RequestBody.create(MediaType.parse("image/*"), file)
+            val image = MultipartBody.Part.createFormData("proFile", file.name, requestFile)
+            var picture = retrofit.create(Picture::class.java)
 
-                BUTTON3 -> {
-
-                    val file = File(photoFile.absolutePath)
-                    val requestFile = RequestBody.create(MediaType.parse("image/*"), file)
-                    val image = MultipartBody.Part.createFormData("proFile", file.name, requestFile)
-                    var picture = retrofit.create(Picture::class.java)
-
-                    println(image)
-                    println(image::class.java.simpleName)
-                    picture.requestPicture(image).enqueue(object : Callback<Login> {
-                        override fun onResponse(call: Call<Login>, response: Response<Login>) {
-                            var login = response.body()
-                            if (login?.code == "0000") {
-                                Toast.makeText(applicationContext, "성공 "+ login?.msg, Toast.LENGTH_SHORT).show()
-                                val imageBytes = Base64.decode(login?.img, 0)
-                                val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                                imageView.setImageBitmap(image)
-                                calorie.text = login?.msg
-                            } else {
-                                Toast.makeText(applicationContext, "실패", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-
-                        override fun onFailure(call: Call<Login>, t: Throwable) {
-                            Toast.makeText(applicationContext, "통신실패", Toast.LENGTH_SHORT).show()
-                        }
-
-                    })
-
+            picture.requestPicture(image).enqueue(object : Callback<Cal> {
+                override fun onResponse(call: Call<Cal>, response: Response<Cal>) {
+                    var login = response.body()
+                    if (login?.code == "0000") {
+                        Toast.makeText(applicationContext, "성공 "+ login?.msg, Toast.LENGTH_SHORT).show()
+                        val imageBytes = Base64.decode(login?.img, 0)
+                        val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                        imageView.setImageBitmap(image)
+                        calorie.text = login?.msg
+                    } else {
+                        Toast.makeText(applicationContext, "실패", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
+
+                override fun onFailure(call: Call<Cal>, t: Throwable) {
+                    Toast.makeText(applicationContext, "통신실패", Toast.LENGTH_SHORT).show()
+                }
+
+            })
         }
     }
 
@@ -170,3 +158,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
