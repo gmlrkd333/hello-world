@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         var retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.35.167:8000")
+            .baseUrl("http://192.168.45.251:8000")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
