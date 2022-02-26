@@ -22,7 +22,7 @@ class LoginPage : AppCompatActivity() {
         }
 
         var retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.35.167:8000")
+            .baseUrl("http://192.168.35.27:8000")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

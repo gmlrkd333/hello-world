@@ -18,7 +18,7 @@ class JoinPage : AppCompatActivity() {
         setContentView(R.layout.activity_join_page)
 
         var retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.35.167:8000")
+            .baseUrl("http://192.168.35.27:8000")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
