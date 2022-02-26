@@ -1,0 +1,38 @@
+com/example/test_project_1/BuildConfig.java
+ com.example.test_project_1.BuildConfig
+androidx/databinding/library/baseAdapters/BR.java
+ androidx.databinding.library.baseAdapters.BR
+com/example/test_project_1/DataBindingTriggerClass.java
+ com.example.test_project_1.DataBindingTriggerClass
+androidx/databinding/DataBindingComponent.java
+ androidx.databinding.DataBindingComponent
+com/example/test_project_1/BR.java
+ com.example.test_project_1.BR
+androidx/databinding/DataBinderMapperImpl.java
+ androidx.databinding.DataBinderMapperImpl
+com/example/test_project_1/databinding/InfoPageBinding.java
+ com.example.test_project_1.databinding.InfoPageBinding
+com/example/test_project_1/databinding/CalendarItemBindingImpl.java
+ com.example.test_project_1.databinding.CalendarItemBindingImpl
+com/example/test_project_1/databinding/LoginPageBinding.java
+ com.example.test_project_1.databinding.LoginPageBinding
+com/example/test_project_1/databinding/CalendarPageBinding.java
+ com.example.test_project_1.databinding.CalendarPageBinding
+com/example/test_project_1/databinding/FoodItemBinding.java
+ com.example.test_project_1.databinding.FoodItemBinding
+com/example/test_project_1/databinding/FoodItemBindingImpl.java
+ com.example.test_project_1.databinding.FoodItemBindingImpl
+com/example/test_project_1/databinding/JoinPageBinding.java
+ com.example.test_project_1.databinding.JoinPageBinding
+com/example/test_project_1/databinding/CameraBinding.java
+ com.example.test_project_1.databinding.CameraBinding
+com/example/test_project_1/databinding/UserPageBinding.java
+ com.example.test_project_1.databinding.UserPageBinding
+com/example/test_project_1/DataBinderMapperImpl.java
+ com.example.test_project_1.DataBinderMapperImpl
+ com.example.test_project_1.DataBinderMapperImpl$InnerBrLookup
+ com.example.test_project_1.DataBinderMapperImpl$InnerLayoutIdLookup
+com/example/test_project_1/databinding/CalendarItemBinding.java
+ com.example.test_project_1.databinding.CalendarItemBinding
+com/example/test_project_1/databinding/ActivityMainBinding.java
+ com.example.test_project_1.databinding.ActivityMainBinding

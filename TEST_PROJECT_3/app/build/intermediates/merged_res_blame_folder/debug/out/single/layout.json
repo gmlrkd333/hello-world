@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\info_page.xml",
+        "source": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\src\\main\\res\\layout\\info_page.xml"
+    },
+    {
+        "merged": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\login_page.xml",
+        "source": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\src\\main\\res\\layout\\login_page.xml"
+    },
+    {
+        "merged": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\food_item.xml",
+        "source": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\src\\main\\res\\layout\\food_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\calendar_page.xml",
+        "source": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\src\\main\\res\\layout\\calendar_page.xml"
+    },
+    {
+        "merged": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\camera.xml",
+        "source": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\src\\main\\res\\layout\\camera.xml"
+    },
+    {
+        "merged": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\calendar_item.xml",
+        "source": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\src\\main\\res\\layout\\calendar_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_main.xml",
+        "source": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\src\\main\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\join_page.xml",
+        "source": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\src\\main\\res\\layout\\join_page.xml"
+    },
+    {
+        "merged": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\user_page.xml",
+        "source": "C:\\Users\\82103\\Documents\\2022-cap-ccp\\TEST_PROJECT_3\\app\\src\\main\\res\\layout\\user_page.xml"
+    }
+]
