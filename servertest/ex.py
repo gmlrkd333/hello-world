@@ -1,7 +1,10 @@
 import cv2
-import base64
+import numpy as np
 
-image = cv2.imread("bb.jpg")
-img_str = base64.b64encode(cv2.imencode('.jpg', image)[1]).decode()
+img = cv2.imread("bb.jpg")
 
-print(type(img_str))
+cv2.putText(img, "한글", (100, 100), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 3)
+
+cv2.imshow("dd", img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
