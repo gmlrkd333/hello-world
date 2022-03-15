@@ -66,7 +66,7 @@ class CameraPage: AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         var retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.35.27:8000")
+            .baseUrl("http://192.168.35.13:8000")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -74,12 +74,19 @@ class CameraPage: AppCompatActivity() {
             val file = File(photoFile.absolutePath)
             val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
             val image = MultipartBody.Part.createFormData("proFile", file.name, requestFile)
+            val sdf = SimpleDateFormat("yyyyMMdd")
+            val filename = sdf.format(System.currentTimeMillis())
+            val date = MultipartBody.Part.createFormData("date", filename)
             var picture = retrofit.create(Picture::class.java)
+            var intent = intent
+            var textId = intent.getStringExtra("textId") as String
+            val id = MultipartBody.Part.createFormData("id", textId)
+
             var imageView: ImageView = findViewById(R.id.imageView)
             var calorie: TextView = findViewById(R.id.calorie)
             var btn: Button = findViewById(R.id.btn)
 
-            picture.requestPicture(image).enqueue(object : Callback<Cal> {
+            picture.requestPicture(image, date, id).enqueue(object : Callback<Cal> {
                 override fun onResponse(call: Call<Cal>, response: Response<Cal>) {
                     var login = response.body()
                     if (login?.code == "0000") {

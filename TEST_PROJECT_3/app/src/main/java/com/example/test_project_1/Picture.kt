@@ -10,6 +10,8 @@ interface Picture {
     @Multipart
     @POST("/calculate/")
     fun requestPicture(
-        @Part image : MultipartBody.Part
+        @Part image : MultipartBody.Part,
+        @Part date : MultipartBody.Part,
+        @Part id : MultipartBody.Part
     ) : Call<Cal>
 }

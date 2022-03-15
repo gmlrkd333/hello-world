@@ -25,11 +25,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        var inten = intent
+        var textId = inten.getStringExtra("textId")
 
         changeFragment(calfrag)
         FragmentPage()
 
         intent.putExtra("DataList", mDatas)
+        intent.putExtra("textId", textId)
     }
 
     private fun FragmentPage() {

@@ -1,15 +1,13 @@
 package com.example.test_project_1
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -63,6 +61,7 @@ class CalendarPage : Fragment() {
         val foodrecyview = view.findViewById<RecyclerView>(R.id.recyview)
 
         var mDatas: ArrayList<Foodmodel> = requireActivity().intent!!.extras!!.get("DataList") as ArrayList<Foodmodel>
+        var textId = requireActivity().intent!!.extras!!.get("textId") as String
 
         daynum = currentDate.get(Calendar.YEAR) * 10000 + (currentDate.get(Calendar.MONTH)+1) * 100 + currentDate.get(Calendar.DAY_OF_MONTH)
 
@@ -81,8 +80,9 @@ class CalendarPage : Fragment() {
         setUpCalendar(calmonth)
 
         camerabt.setOnClickListener {
-            var intent = Intent(requireContext(), CameraPage::class.java)
-            startActivity(intent)
+            var intent = Intent(getActivity(), CameraPage::class.java)
+            intent.putExtra("textId", textId)
+            startActivityForResult(intent, 0)
         }
 
 
@@ -93,6 +93,14 @@ class CalendarPage : Fragment() {
         foodrecyview.setHasFixedSize(true)
 
         return view
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK){
+            var cal = data!!.getStringExtra("cal")
+            Toast.makeText(getActivity(), cal, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setUpClickListener(calmonth: TextView) {

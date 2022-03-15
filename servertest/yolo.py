@@ -3,14 +3,7 @@ import cv2
 import numpy as np
 import base64
 
-db = pymysql.connect(
-    user='root',
-    passwd='1234',
-    host='localhost',
-    db='food',
-    charset='utf8'
-)
-cursor = db.cursor()
+
 
 # YOLO 가중치 파일과 CFG 파일 로드
 net = cv2.dnn.readNet("yolov3_final_6.weights","yolov3.cfg")
@@ -23,7 +16,16 @@ output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
 
-def process(image):
+def process(image, user, date):
+    db = pymysql.connect(
+        user='root',
+        passwd='1234',
+        host='localhost',
+        db='food',
+        charset='utf8'
+    )
+    cursor = db.cursor()
+
     img = cv2.imread(image)
     img = cv2.resize(img, None, fx=0.4, fy=0.4)
     height, width, channels = img.shape
@@ -62,17 +64,19 @@ def process(image):
             cv2.putText(img, label, (x, y + 30), font, 3, color, 3)
             foods.append(class_ids[i])
     sum_calorie = 0
-    sql = "select calorie from foods where id = %s"
+    sql = "select calorie, carbo, protein, fat from foods where id = %s"
+    sql_insert = "insert into user_food (user, food, tim, calorie, carbo, protein, fat) " \
+                 "values (%s, %s, %s, %s, %s, %s, %s)"
     for i in range(len(foods)):
         cursor.execute(sql, foods[i])
         result = cursor.fetchall()
+        cursor.execute(sql_insert, (user, foods[i], date, result[0][0], result[0][1], result[0][2], result[0][3]))
         sum_calorie += result[0][0]
     print(sum_calorie)
 
     img_str = base64.b64encode(cv2.imencode('.jpg', img)[1]).decode()
 
-    #cv2.imshow("Image", img)
-    #cv2.waitKey(0)
-    #cv2.destroyAllWindows()
+    db.commit()
+    db.close()
 
     return sum_calorie, img_str
