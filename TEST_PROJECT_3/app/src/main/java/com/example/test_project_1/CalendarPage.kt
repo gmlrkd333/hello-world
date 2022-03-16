@@ -19,6 +19,12 @@ import com.example.test_project_1.calrecy.CalendarDateModel
 import com.example.test_project_1.databinding.CalendarItemBinding
 import com.example.test_project_1.foodrecy.Foodmodel
 import com.example.test_project_1.foodrecy.RecyclerAdapter
+import com.example.test_project_1.login.Login
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.time.Year
 import java.util.*
@@ -43,6 +49,11 @@ class CalendarPage : Fragment() {
 
     private lateinit var maxbar: View
     private lateinit var todaybar: View
+
+    private lateinit var meal_time: RadioGroup
+    private lateinit var breakfast: RadioButton
+    private lateinit var lunch: RadioButton
+    private lateinit var dinner: RadioButton
 
     private var todayTotal: Int = 0
     private var maxkcal: Int = 2500
@@ -75,6 +86,53 @@ class CalendarPage : Fragment() {
         maxbar = view.findViewById(R.id.maxbar)
         todaybar = view.findViewById(R.id.todaybar)
 
+        breakfast = view.findViewById(R.id.breakfast)
+        lunch = view.findViewById(R.id.lunch)
+        dinner = view.findViewById(R.id.dinner)
+        meal_time = view.findViewById(R.id.meal_time)
+        lateinit var time: String
+
+        meal_time.setOnCheckedChangeListener { radioGroup, i ->
+            when(i){
+                R.id.breakfast -> time = "0"
+                R.id.lunch -> time = "1"
+                R.id.dinner -> time = "2"
+            }
+            //test
+            var retrofit = Retrofit.Builder()
+                .baseUrl("http://192.168.35.13:8000")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            var foodService = retrofit.create(FoodService::class.java)
+            foodService.searchFood(time, textId).enqueue(object: Callback<Food>{
+                override fun onResponse(call: Call<Food>, response: Response<Food>) {
+                    var food = response.body() as Food
+                    if(food.code == "0000"){
+                        Toast.makeText(getActivity(), "성공", Toast.LENGTH_SHORT).show()
+                        mDatas.clear()
+                        for (f in food.foods){
+                            mDatas.add(Foodmodel("", f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
+                        }
+                    }
+                    else{
+                        Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
+                        mDatas.clear()
+                    }
+                    val recyadapter= RecyclerAdapter(requireContext(), mDatas)
+                    foodrecyview.adapter=recyadapter
+                    val mLayoutManager = LinearLayoutManager(context)
+                    foodrecyview.layoutManager = mLayoutManager
+                    foodrecyview.setHasFixedSize(true)
+                }
+
+                override fun onFailure(call: Call<Food>, t: Throwable) {
+                    Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
+                }
+
+            })
+        }
+
+
         setUpAdapter(mDatas, calrecyview)
         setUpClickListener(calmonth)
         setUpCalendar(calmonth)
@@ -82,6 +140,7 @@ class CalendarPage : Fragment() {
         camerabt.setOnClickListener {
             var intent = Intent(getActivity(), CameraPage::class.java)
             intent.putExtra("textId", textId)
+            intent.putExtra("time", time)
             startActivityForResult(intent, 0)
         }
 

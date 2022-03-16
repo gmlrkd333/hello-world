@@ -75,11 +75,13 @@ class CameraPage: AppCompatActivity() {
             val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
             val image = MultipartBody.Part.createFormData("proFile", file.name, requestFile)
             val sdf = SimpleDateFormat("yyyyMMdd")
-            val filename = sdf.format(System.currentTimeMillis())
-            val date = MultipartBody.Part.createFormData("date", filename)
+            var filename = sdf.format(System.currentTimeMillis())
             var picture = retrofit.create(Picture::class.java)
             var intent = intent
             var textId = intent.getStringExtra("textId") as String
+            var time = intent.getStringExtra("time") as String
+            filename += time
+            val date = MultipartBody.Part.createFormData("date", filename)
             val id = MultipartBody.Part.createFormData("id", textId)
 
             var imageView: ImageView = findViewById(R.id.imageView)

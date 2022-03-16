@@ -57,7 +57,8 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
     <RadioGroup
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/meal_time">
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
