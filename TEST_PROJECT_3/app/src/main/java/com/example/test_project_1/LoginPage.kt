@@ -61,6 +61,10 @@ class LoginPage : AppCompatActivity() {
                         Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
                         var intent= Intent(applicationContext, MainActivity::class.java)
                         intent.putExtra("textId", textId)
+                        intent.putExtra("sex", login?.sex)
+                        intent.putExtra("weight", login?.weight)
+                        intent.putExtra("height", login?.height)
+                        intent.putExtra("age", login?.age)
                         startActivity(intent)
                     }
                     else{

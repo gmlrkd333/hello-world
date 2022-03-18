@@ -5,6 +5,7 @@ import retrofit2.Call
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Query
 
 interface Picture {
     @Multipart
@@ -12,6 +13,10 @@ interface Picture {
     fun requestPicture(
         @Part image : MultipartBody.Part,
         @Part date : MultipartBody.Part,
-        @Part id : MultipartBody.Part
+        @Part id : MultipartBody.Part,
+        @Part sex : MultipartBody.Part,
+        @Part weight : MultipartBody.Part,
+        @Part height : MultipartBody.Part,
+        @Part age : MultipartBody.Part,
     ) : Call<Cal>
 }

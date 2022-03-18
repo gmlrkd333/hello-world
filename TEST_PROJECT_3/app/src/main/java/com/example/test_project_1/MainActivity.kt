@@ -27,12 +27,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         var inten = intent
         var textId = inten.getStringExtra("textId")
+        var sex = inten.getStringExtra("sex")
+        var weight = inten.getIntExtra("weight", 0)
+        var height = inten.getIntExtra("height", 0)
+        var age = inten.getIntExtra("age", 0)
 
         changeFragment(calfrag)
         FragmentPage()
 
         intent.putExtra("DataList", mDatas)
         intent.putExtra("textId", textId)
+        intent.putExtra("sex", sex)
+        intent.putExtra("weight", weight)
+        intent.putExtra("height", height)
+        intent.putExtra("age", age)
     }
 
     private fun FragmentPage() {

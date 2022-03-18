@@ -75,18 +75,23 @@ class CameraPage: AppCompatActivity() {
             val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
             val image = MultipartBody.Part.createFormData("proFile", file.name, requestFile)
             val sdf = SimpleDateFormat("yyyyMMdd")
-            val filename = sdf.format(System.currentTimeMillis())
-            val date = MultipartBody.Part.createFormData("date", filename)
+            var filename = sdf.format(System.currentTimeMillis())
             var picture = retrofit.create(Picture::class.java)
             var intent = intent
-            var textId = intent.getStringExtra("textId") as String
-            val id = MultipartBody.Part.createFormData("id", textId)
+            var time = intent.getStringExtra("time") as String
+            var sex = MultipartBody.Part.createFormData("sex",intent.getStringExtra("sex") as String)
+            var weight = MultipartBody.Part.createFormData("weight",intent.getIntExtra("weight", 0).toString())
+            var height = MultipartBody.Part.createFormData("height", intent.getIntExtra("height", 0).toString())
+            var age = MultipartBody.Part.createFormData("age", intent.getIntExtra("age", 0).toString())
+            filename += time
+            val date = MultipartBody.Part.createFormData("date", filename)
+            val id = MultipartBody.Part.createFormData("id", intent.getStringExtra("textId") as String)
 
             var imageView: ImageView = findViewById(R.id.imageView)
             var calorie: TextView = findViewById(R.id.calorie)
             var btn: Button = findViewById(R.id.btn)
 
-            picture.requestPicture(image, date, id).enqueue(object : Callback<Cal> {
+            picture.requestPicture(image, date, id, sex, weight, height, age).enqueue(object : Callback<Cal> {
                 override fun onResponse(call: Call<Cal>, response: Response<Cal>) {
                     var login = response.body()
                     if (login?.code == "0000") {

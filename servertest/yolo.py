@@ -16,7 +16,7 @@ output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
 
-def process(image, user, date):
+def process(image, user, date, sex, weight, height, age):
     db = pymysql.connect(
         user='root',
         passwd='1234',
@@ -64,13 +64,14 @@ def process(image, user, date):
             cv2.putText(img, label, (x, y + 30), font, 3, color, 3)
             foods.append(class_ids[i])
     sum_calorie = 0
-    sql = "select calorie, carbo, protein, fat from foods where id = %s"
-    sql_insert = "insert into user_food (user, food, tim, calorie, carbo, protein, fat) " \
-                 "values (%s, %s, %s, %s, %s, %s, %s)"
+    sql = "select calorie, carbo, protein, fat, name from foods where id = %s"
+    sql_insert = "insert into user_food (user, food, food_name, tim, sex, weight, height, age, calorie, carbo, " \
+                 "protein, fat) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     for i in range(len(foods)):
         cursor.execute(sql, foods[i])
         result = cursor.fetchall()
-        cursor.execute(sql_insert, (user, foods[i], date, result[0][0], result[0][1], result[0][2], result[0][3]))
+        cursor.execute(sql_insert, (user, foods[i], result[0][4], date, sex, weight, height, age,
+                                    result[0][0], result[0][1], result[0][2], result[0][3]))
         sum_calorie += result[0][0]
     print(sum_calorie)
 
