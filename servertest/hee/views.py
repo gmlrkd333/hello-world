@@ -15,8 +15,9 @@ def join(request):
         password = request.POST.get('password', '')
         age = request.POST.get('age', 0)
         sex = request.POST.get('sex', '')
+        height = request.POST.get('height', 0)
         weight = request.POST.get('weight', 0)
-        user = MyUser.objects.create_superuser(username, password, age, sex, weight)
+        user = MyUser.objects.create_superuser(username, password, age, sex, height, weight)
         user.save()
         return JsonResponse({'code': '0000', 'msg': '회원가입 성공입니다.'}, status=200)
 
@@ -31,7 +32,21 @@ def login(request):
 
         if result:
             print("성공")
-            return JsonResponse({'code': '0000', 'msg': '로그인성공입니다.'}, status=200)
+
+            db = pymysql.connect(
+                user='root',
+                passwd='1234',
+                host='localhost',
+                db='food',
+                charset='utf8'
+            )
+            cursor = db.cursor()
+            sql = "select sex, weight, height, age from user where username = %s"
+            cursor.execute(sql, id)
+            result = cursor.fetchall()
+
+            return JsonResponse({'code': '0000', 'sex': result[0][0], 'weight': result[0][1], 'height': result[0][2],
+                                 'age': result[0][3]}, status=200)
         else:
             print("실패")
             return JsonResponse({'code': '1001', 'msg': '로그인실패입니다.'}, status=200)
@@ -44,7 +59,14 @@ def calculate(request):
         default_storage.save(str(file), ContentFile(file.read()))
         date = request.POST.get('date', '')
         user = request.POST.get('id', '')
-        sum_calorie, img = yolo.process(str(file), user, date)
+        sex = request.POST.get('sex', '')
+        weight = int(request.POST.get('weight', ''))
+        height = int(request.POST.get('height', ''))
+        age = int(request.POST.get('age', ''))
+        print(date, type(date))
+        print(user, sex)
+        print(age, type(age))
+        sum_calorie, img = yolo.process(str(file), user, date, sex, weight, height, age)
         return JsonResponse({'code': '0000', 'msg': str(sum_calorie), 'img': img},  status=200)
 
 
@@ -65,10 +87,8 @@ def food(request):
         sql = "select food_name, tim, calorie, carbo, protein, fat from user_food where user = %s and tim like %s"
         cursor.execute(sql, (userid, "%"+time))
         result = cursor.fetchall()
-        print(result)
         if len(result) == 0:
             return JsonResponse({"code": "0001"})
         else:
             lst = [list(foods) for foods in result]
-            print(lst)
             return JsonResponse({"foods": [list(foods) for foods in result], "code": "0000"}, status=200)

@@ -5,8 +5,8 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, password, age, sex, weight):
-        user = self.model(username=username, password=password, age=age, sex=sex, weight=weight)
+    def create_user(self, username, password, age, sex, height, weight):
+        user = self.model(username=username, password=password, age=age, sex=sex, height=height, weight=weight)
 
         user.is_admin = True
         user.is_superuser = True
@@ -15,8 +15,8 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, password, age, sex, weight):
-        user = self.create_user(username=username, password=password,  age=age, sex=sex, weight=weight)
+    def create_superuser(self, username, password, age, sex, height, weight):
+        user = self.create_user(username=username, password=password,  age=age, sex=sex, height=height, weight=weight)
         user.is_admin = True
         user.is_superuser = True
         user.is_staff = True
@@ -32,6 +32,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=10, unique=True)
     age = models.IntegerField()
     sex = models.CharField(max_length=5)
+    height = models.IntegerField()
     weight = models.IntegerField()
     date_joined = models.DateTimeField(auto_now_add=True)
 
@@ -41,7 +42,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['age', 'sex', 'weight']
+    REQUIRED_FIELDS = ['age', 'sex', 'height', 'weight']
 
     def __str__(self):
         return self.username

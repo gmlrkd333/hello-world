@@ -37,6 +37,8 @@ class CalendarPage : Fragment() {
     private val calList = ArrayList<CalendarDateModel>()
     private val sdf = SimpleDateFormat("yyyy년 MM월")
     private val sdf2 = SimpleDateFormat("yyyyMMdd")
+    var today = sdf2.format(System.currentTimeMillis())
+    var selectDay = today
 
     private var daynum: Int = 0
 
@@ -64,7 +66,7 @@ class CalendarPage : Fragment() {
     private var maxwidth: Int = 0
     private var barwidth: Int = 0
 
-    lateinit var time: String
+    var time: String = "0"
     lateinit var textId: String
     lateinit var mDatas: ArrayList<Foodmodel>
 
@@ -81,11 +83,15 @@ class CalendarPage : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.calendar_page, container, false)
 
-        calrecyview = view.findViewById<RecyclerView>(R.id.recy_date)
-        foodrecyview = view.findViewById<RecyclerView>(R.id.recyview)
+        calrecyview = view.findViewById(R.id.recy_date)
+        foodrecyview = view.findViewById(R.id.recyview)
 
         mDatas = requireActivity().intent!!.extras!!.get("DataList") as ArrayList<Foodmodel>
         textId = requireActivity().intent!!.extras!!.get("textId") as String
+        var sex = requireActivity().intent!!.extras!!.get("sex") as String
+        var weight = requireActivity().intent!!.extras!!.get("weight") as Int
+        var height = requireActivity().intent!!.extras!!.get("height") as Int
+        var age = requireActivity().intent!!.extras!!.get("age") as Int
 
         daynum = currentDate.get(Calendar.YEAR) * 10000 + (currentDate.get(Calendar.MONTH)+1) * 100 + currentDate.get(Calendar.DAY_OF_MONTH)
 
@@ -104,6 +110,31 @@ class CalendarPage : Fragment() {
         dinner = view.findViewById(R.id.dinner)
         meal_time = view.findViewById(R.id.meal_time)
 
+        foodService.searchFood(today+time, textId).enqueue(object: Callback<Food>{
+            override fun onResponse(call: Call<Food>, response: Response<Food>) {
+                var food = response.body() as Food
+                if(food.code == "0000"){
+                    mDatas.clear()
+                    for (f in food.foods){
+                        mDatas.add(Foodmodel("", f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
+                    }
+                }
+                else{
+                    Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
+                    mDatas.clear()
+                }
+                val recyadapter= RecyclerAdapter(requireContext(), mDatas)
+                foodrecyview.adapter=recyadapter
+                val mLayoutManager = LinearLayoutManager(context)
+                foodrecyview.layoutManager = mLayoutManager
+                foodrecyview.setHasFixedSize(true)
+            }
+
+            override fun onFailure(call: Call<Food>, t: Throwable) {
+                Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
         meal_time.setOnCheckedChangeListener { radioGroup, i ->
             when(i){
@@ -113,11 +144,10 @@ class CalendarPage : Fragment() {
             }
             //test
 
-            foodService.searchFood(time, textId).enqueue(object: Callback<Food>{
+            foodService.searchFood(selectDay+time, textId).enqueue(object: Callback<Food>{
                 override fun onResponse(call: Call<Food>, response: Response<Food>) {
                     var food = response.body() as Food
                     if(food.code == "0000"){
-                        Toast.makeText(getActivity(), "성공", Toast.LENGTH_SHORT).show()
                         mDatas.clear()
                         for (f in food.foods){
                             mDatas.add(Foodmodel("", f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
@@ -150,6 +180,10 @@ class CalendarPage : Fragment() {
             var intent = Intent(getActivity(), CameraPage::class.java)
             intent.putExtra("textId", textId)
             intent.putExtra("time", time)
+            intent.putExtra("sex", sex)
+            intent.putExtra("weight", weight)
+            intent.putExtra("height", height)
+            intent.putExtra("age", age)
             startActivityForResult(intent, 0)
         }
 
@@ -169,11 +203,10 @@ class CalendarPage : Fragment() {
             var cal = data!!.getStringExtra("cal")
             Toast.makeText(getActivity(), cal, Toast.LENGTH_SHORT).show()
             
-            foodService.searchFood(time, textId).enqueue(object: Callback<Food>{
+            foodService.searchFood(today+time, textId).enqueue(object: Callback<Food>{
                 override fun onResponse(call: Call<Food>, response: Response<Food>) {
                     var food = response.body() as Food
                     if(food.code == "0000"){
-                        Toast.makeText(getActivity(), "성공", Toast.LENGTH_SHORT).show()
                         mDatas.clear()
                         for (f in food.foods){
                             mDatas.add(Foodmodel("", f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
@@ -222,7 +255,36 @@ class CalendarPage : Fragment() {
             calList.forEach {
                 if(it.isSelected) {
                     daynum = sdf2.format(it.data).toString().toInt()
+                    selectDay = sdf2.format(it.data)
                     goalkcal.setText(daynum.toString())
+
+                    //test
+                    foodService.searchFood(selectDay+time, textId).enqueue(object: Callback<Food>{
+                        override fun onResponse(call: Call<Food>, response: Response<Food>) {
+                            var food = response.body() as Food
+                            if(food.code == "0000"){
+                                Toast.makeText(getActivity(), "성공", Toast.LENGTH_SHORT).show()
+                                mDatas.clear()
+                                for (f in food.foods){
+                                    mDatas.add(Foodmodel("", f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
+                                }
+                            }
+                            else{
+                                Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
+                                mDatas.clear()
+                            }
+                            val recyadapter= RecyclerAdapter(requireContext(), mDatas)
+                            foodrecyview.adapter=recyadapter
+                            val mLayoutManager = LinearLayoutManager(context)
+                            foodrecyview.layoutManager = mLayoutManager
+                            foodrecyview.setHasFixedSize(true)
+                        }
+
+                        override fun onFailure(call: Call<Food>, t: Throwable) {
+                            Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
                 }
             }
             adapter.setData(calList)
