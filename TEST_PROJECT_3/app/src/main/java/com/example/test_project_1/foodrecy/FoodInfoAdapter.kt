@@ -5,15 +5,14 @@ import android.view.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test_project_1.R
 import com.example.test_project_1.databinding.FoodItemBinding
-import java.util.*
 import kotlin.collections.ArrayList
 
-class RecyclerAdapter(val context: Context, val datalist: ArrayList<Foodmodel>):
-    RecyclerView.Adapter<RecyclerAdapter.Holder>() {
+class FoodInfoAdapter(val context: Context, val datalist: ArrayList<FoodModel>):
+    RecyclerView.Adapter<FoodInfoAdapter.Holder>() {
 
     inner class Holder(private val binding: FoodItemBinding): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(foodModel: Foodmodel) {
+        fun bind(foodModel: FoodModel) {
             if (foodModel.food_img != "") {
                 val resourceId = context.resources.getIdentifier(foodModel.food_img, "drawable", context.packageName)
                 binding.foodImg.setImageResource(resourceId)

@@ -1,6 +1,6 @@
 package com.example.test_project_1
 
-import com.example.test_project_1.login.Login
+import com.example.test_project_1.Food
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded

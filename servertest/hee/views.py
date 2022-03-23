@@ -6,6 +6,8 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import yolo
 import pymysql
+import os
+import datamod
 
 
 @csrf_exempt
@@ -63,10 +65,8 @@ def calculate(request):
         weight = int(request.POST.get('weight', ''))
         height = int(request.POST.get('height', ''))
         age = int(request.POST.get('age', ''))
-        print(date, type(date))
-        print(user, sex)
-        print(age, type(age))
         sum_calorie, img = yolo.process(str(file), user, date, sex, weight, height, age)
+
         return JsonResponse({'code': '0000', 'msg': str(sum_calorie), 'img': img},  status=200)
 
 
@@ -87,8 +87,18 @@ def food(request):
         sql = "select food_name, tim, calorie, carbo, protein, fat from user_food where user = %s and tim like %s"
         cursor.execute(sql, (userid, "%"+time))
         result = cursor.fetchall()
+
         if len(result) == 0:
             return JsonResponse({"code": "0001"})
         else:
             lst = [list(foods) for foods in result]
             return JsonResponse({"foods": [list(foods) for foods in result], "code": "0000"}, status=200)
+
+
+@csrf_exempt
+def datainfo(request):
+    if request.method == 'POST':
+        datamod.agecalavglist
+        datamod.monthavgcal
+
+        return JsonResponse({'code': '0000', 'agecalavglist':datamod.agecalavglist, 'monthavgcal':datamod.monthavgcal}, status=200)

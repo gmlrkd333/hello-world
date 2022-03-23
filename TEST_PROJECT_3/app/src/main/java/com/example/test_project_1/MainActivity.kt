@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.test_project_1.foodrecy.Foodmodel
+import com.example.test_project_1.foodrecy.FoodModel
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -16,10 +16,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var toinfobt:Button
     lateinit var tocalbt:Button
 
-    var mDatas: ArrayList<Foodmodel> = arrayListOf(
-        Foodmodel("dduck", "떡볶이", 202202161, 200, 5, 4, 10),
-        Foodmodel("pizza", "피자", 202202252, 100, 15, 2, 3),
-        Foodmodel("", "카레", 202202053, 500, 12, 15, 30)
+    var mData: ArrayList<FoodModel> = arrayListOf(
+        FoodModel("dduck", "떡볶이", 202202161, 200, 5, 4, 10),
+        FoodModel("pizza", "피자", 202202252, 100, 15, 2, 3),
+        FoodModel("", "카레", 202202053, 500, 12, 15, 30)
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         changeFragment(calfrag)
         FragmentPage()
 
-        intent.putExtra("DataList", mDatas)
+        intent.putExtra("DataList", mData)
         intent.putExtra("textId", textId)
         intent.putExtra("sex", sex)
         intent.putExtra("weight", weight)

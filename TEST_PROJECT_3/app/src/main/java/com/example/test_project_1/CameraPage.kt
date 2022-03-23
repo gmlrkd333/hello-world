@@ -66,7 +66,7 @@ class CameraPage: AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         var retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.35.13:8000")
+            .baseUrl("http://192.168.35.118:8000")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

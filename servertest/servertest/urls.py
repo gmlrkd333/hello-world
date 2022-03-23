@@ -22,5 +22,6 @@ urlpatterns = [
     path('join/', views.join),
     path('login/', views.login),
     path('calculate/', views.calculate),
-    path('food/', views.food)
+    path('food/', views.food),
+    path('datainfo/', views.datainfo)
 ]

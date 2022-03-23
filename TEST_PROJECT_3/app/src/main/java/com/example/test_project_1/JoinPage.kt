@@ -30,7 +30,7 @@ class JoinPage : AppCompatActivity() {
         var weight: EditText = findViewById(R.id.weight)
 
         var retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.35.13:8000")
+            .baseUrl("http://192.168.35.118:8000")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

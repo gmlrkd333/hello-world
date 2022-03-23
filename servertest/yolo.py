@@ -2,11 +2,11 @@ import pymysql
 import cv2
 import numpy as np
 import base64
-
+import os
 
 
 # YOLO 가중치 파일과 CFG 파일 로드
-net = cv2.dnn.readNet("yolov3_final_6.weights","yolov3.cfg")
+net = cv2.dnn.readNet("yolov3_last.weights","yolov3.cfg")
 # YOLO NETWORK 재구성
 classes = []
 with open("obj.names", "r") as f:
@@ -16,7 +16,7 @@ output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
 
-def process(image, user, date, sex, weight, height, age):
+def process(image, user, date, sex, weight, user_height, age):
     db = pymysql.connect(
         user='root',
         passwd='1234',
@@ -70,7 +70,7 @@ def process(image, user, date, sex, weight, height, age):
     for i in range(len(foods)):
         cursor.execute(sql, foods[i])
         result = cursor.fetchall()
-        cursor.execute(sql_insert, (user, foods[i], result[0][4], date, sex, weight, height, age,
+        cursor.execute(sql_insert, (user, foods[i], result[0][4], date, sex, weight, user_height, age,
                                     result[0][0], result[0][1], result[0][2], result[0][3]))
         sum_calorie += result[0][0]
     print(sum_calorie)
