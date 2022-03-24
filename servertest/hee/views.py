@@ -102,3 +102,16 @@ def datainfo(request):
         datamod.monthavgcal
 
         return JsonResponse({'code': '0000', 'agecalavglist':datamod.agecalavglist, 'monthavgcal':datamod.monthavgcal}, status=200)
+
+
+@csrf_exempt
+def datainfo2(request):
+    if request.method == 'POST':
+        sex = request.POST.get('sex', '')
+        height = request.POST.get('height')
+        weight = request.POST.get('weight')
+        age = request.POST.get('age')
+
+        print(sex, height, weight, age)
+
+        return JsonResponse({'code': '0000', 'info': ['1', '2', '3']}, status=200)
