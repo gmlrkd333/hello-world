@@ -221,6 +221,8 @@ def userinfo(request):
         for i in range(len(tmp1)):
             userdaycallist30.append([tmp1[i], tmp2[i]])
 
+        print(userdaycallist30)
+
         db.commit()
         db.close()
 
