@@ -110,7 +110,9 @@ class CalendarPage : Fragment() {
         lunch = view.findViewById(R.id.lunch)
         dinner = view.findViewById(R.id.dinner)
         meal_time = view.findViewById(R.id.meal_time)
-        
+
+        println("sdfsdfsdfs")
+
         foodService.searchFood(today+time, textId).enqueue(object: Callback<Food>{
             override fun onResponse(call: Call<Food>, response: Response<Food>) {
                 var food = response.body() as Food
