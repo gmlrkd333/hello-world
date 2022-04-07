@@ -111,8 +111,6 @@ class CalendarPage : Fragment() {
         dinner = view.findViewById(R.id.dinner)
         meal_time = view.findViewById(R.id.meal_time)
 
-        println("sdfsdfsdfs")
-
         foodService.searchFood(today+time, textId).enqueue(object: Callback<Food>{
             override fun onResponse(call: Call<Food>, response: Response<Food>) {
                 var food = response.body() as Food
@@ -215,9 +213,6 @@ class CalendarPage : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == Activity.RESULT_OK){
-            var cal = data!!.getStringExtra("cal")
-            Toast.makeText(getActivity(), cal, Toast.LENGTH_SHORT).show()
-
             //test
             foodService.searchFood(today+time, textId).enqueue(object: Callback<Food>{
                 override fun onResponse(call: Call<Food>, response: Response<Food>) {

@@ -72,49 +72,50 @@ class CameraPage: AppCompatActivity() {
             val file = File(photoFile.absolutePath)
             val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
             val image = MultipartBody.Part.createFormData("proFile", file.name, requestFile)
-            val sdf = SimpleDateFormat("yyyyMMdd")
-            var filename = sdf.format(System.currentTimeMillis())
+
             var picture = retrofit.create(Picture::class.java)
-            var intent = intent
-            var time = intent.getStringExtra("time") as String
-            var sex = MultipartBody.Part.createFormData("sex",intent.getStringExtra("sex") as String)
-            var weight = MultipartBody.Part.createFormData("weight",intent.getIntExtra("weight", 0).toString())
-            var height = MultipartBody.Part.createFormData("height", intent.getIntExtra("height", 0).toString())
-            var age = MultipartBody.Part.createFormData("age", intent.getIntExtra("age", 0).toString())
-            filename += time
-            val date = MultipartBody.Part.createFormData("date", filename)
-            val id = MultipartBody.Part.createFormData("id", intent.getStringExtra("textId") as String)
 
             var imageView: ImageView = findViewById(R.id.imageView)
             var calorie: TextView = findViewById(R.id.calorie)
             var btn: Button = findViewById(R.id.btn)
 
-            picture.requestPicture(image, date, id, sex, weight, height, age).enqueue(object : Callback<Cal> {
+            picture.requestPicture(image).enqueue(object : Callback<Cal> {
                 override fun onResponse(call: Call<Cal>, response: Response<Cal>) {
-                    var login = response.body()
-                    if (login?.code == "0000") {
-                        Toast.makeText(applicationContext, "성공 "+ login?.msg, Toast.LENGTH_SHORT).show()
-                        val imageBytes = Base64.decode(login?.img, 0)
+                    var result = response.body()
+                    if (result?.code == "0000") {
+                        Toast.makeText(applicationContext, "성공 ", Toast.LENGTH_SHORT).show()
+                        val imageBytes = Base64.decode(result?.img, 0)
                         val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                         imageView.setImageBitmap(image)
-                        calorie.text = login?.msg
+
+                        var foods = result.foods
+                        for(i in 0 until foods.size){
+                            println(foods[i])
+                        }
 
                         btn.setOnClickListener {
+                            Toast.makeText(applicationContext, "저장", Toast.LENGTH_SHORT).show()
                             var outIntent = Intent(applicationContext, CalendarPage::class.java)
-                            outIntent.putExtra("cal", login?.msg)
                             setResult(Activity.RESULT_OK, outIntent)
                             finish()
                         }
 
                     } else {
                         Toast.makeText(applicationContext, "실패", Toast.LENGTH_SHORT).show()
+                        val imageBytes = Base64.decode(result?.img, 0)
+                        val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                        imageView.setImageBitmap(image)
+
+                        btn.setOnClickListener {
+                            var outIntent = Intent(applicationContext, CalendarPage::class.java)
+                            setResult(Activity.RESULT_OK, outIntent)
+                            finish()
+                        }
                     }
                 }
-
                 override fun onFailure(call: Call<Cal>, t: Throwable) {
                     Toast.makeText(applicationContext, "통신실패", Toast.LENGTH_SHORT).show()
                 }
-
             })
         }
     }

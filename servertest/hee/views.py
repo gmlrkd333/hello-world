@@ -62,15 +62,13 @@ def calculate(request):
     if request.method == 'POST':
         file = request.FILES['proFile']
         default_storage.save(str(file), ContentFile(file.read()))
-        date = request.POST.get('date', '')
-        user = request.POST.get('id', '')
-        sex = request.POST.get('sex', '')
-        weight = int(request.POST.get('weight', ''))
-        height = int(request.POST.get('height', ''))
-        age = int(request.POST.get('age', ''))
-        sum_calorie, img = yolo.process(str(file), user, date, sex, weight, height, age)
 
-        return JsonResponse({'code': '0000', 'msg': str(sum_calorie), 'img': img},  status=200)
+        foods, img, leng = yolo.process(str(file))
+
+        if leng == 0:
+            return JsonResponse({'code': '0001', 'img': img}, status=200)
+        else:
+            return JsonResponse({'code': '0000', 'foods': foods, 'img': img},  status=200)
 
 
 @csrf_exempt
