@@ -238,7 +238,7 @@ def saveFood(request):
         user_weight = int(request.POST.get('user_weight'))
         age = int(request.POST.get('age'))
 
-        
+
 
         db = pymysql.connect(
             user='root',
