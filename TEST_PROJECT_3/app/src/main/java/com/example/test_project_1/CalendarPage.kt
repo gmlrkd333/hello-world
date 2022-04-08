@@ -183,7 +183,7 @@ class CalendarPage : Fragment() {
         camerabt.setOnClickListener {
             var intent = Intent(getActivity(), CameraPage::class.java)
             intent.putExtra("textId", textId)
-            intent.putExtra("time", time)
+            intent.putExtra("time", today+time)
             intent.putExtra("sex", sex)
             intent.putExtra("weight", weight)
             intent.putExtra("height", height)
