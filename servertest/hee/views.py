@@ -231,10 +231,11 @@ def saveFood(request):
     if request.method == 'POST':
         food_name = request.POST.get('food_name', '')
         time = request.POST.get('time', 0)
+        food_weight = request.POST.get('food_weight', 0)
         user = request.POST.get('id', '')
         sex = request.POST.get('sex', '')
         height = int(request.POST.get('height'))
-        weight = int(request.POST.get('weight'))
+        user_weight = int(request.POST.get('user_weight'))
         age = int(request.POST.get('age'))
 
         db = pymysql.connect(
@@ -253,9 +254,9 @@ def saveFood(request):
         protein = result[0][2]
         fat = result[0][3]
         id = result[0][4]
-        sql = "insert into user_food (user, food, food_name, tim, sex, weight, height, age, calorie, carbo, " \
-                 "protein, fat) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, (user, id, food_name, time, sex, weight, height, age,
+        sql = "insert into user_food (user, food, food_name, quantity, tim, sex, weight, height, age, calorie, carbo, " \
+                 "protein, fat) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, (user, id, food_name, food_weight, time, sex, user_weight, height, age,
                                     calorie, carbo, protein, fat))
         db.commit()
         db.close()

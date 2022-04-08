@@ -133,7 +133,7 @@ class AddPage : AppCompatActivity() {
             var savefood = retrofit.create(SaveFood::class.java)
 
             mDatas.forEach{
-                savefood.saveFood(it.add_name, it.add_date, id, sex, user_weight, height, age).enqueue(object: Callback<Food> {
+                savefood.saveFood(it.add_name, it.add_date, it.add_weight, id, sex, user_weight, height, age).enqueue(object: Callback<Food> {
                     override fun onResponse(call: Call<Food>, response: Response<Food>) {
                         var food = response.body() as Food
                         if(food.code == "0000"){
