@@ -90,6 +90,7 @@ class CameraPage: AppCompatActivity() {
                         var foods = result?.foods
                         var food_weight = resources.getStringArray(R.array.dietweight)
                         var calculated_weight = Array(10, {"1"})
+                        var weightnum = Array(10, {3})
                         var adapter1 = ArrayAdapter(this@CameraPage, android.R.layout.simple_spinner_dropdown_item, foods)
                         var adapter2 = ArrayAdapter(this@CameraPage, android.R.layout.simple_spinner_dropdown_item, food_weight)
                         spinner1.adapter = adapter1
@@ -100,6 +101,7 @@ class CameraPage: AppCompatActivity() {
                             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                                 println(spinner1.selectedItem)
                                 println(spinner2.selectedItem)
+                                spinner2.setSelection(weightnum[spinner1.selectedItemPosition])
                             }
                             override fun onNothingSelected(parent: AdapterView<*>) {
                             }
@@ -111,6 +113,7 @@ class CameraPage: AppCompatActivity() {
                                 println(spinner1.selectedItem)
                                 println(spinner2.selectedItem)
                                 calculated_weight[spinner1.selectedItemPosition] = spinner2.selectedItem.toString()
+                                weightnum[spinner1.selectedItemPosition] = spinner2.selectedItemPosition
                                 for(i in 0 until foods.size){
                                     println(calculated_weight[i])
                                 }

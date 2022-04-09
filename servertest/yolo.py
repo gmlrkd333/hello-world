@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import base64
 import os
+from PIL import ImageFont, ImageDraw, Image
 
 
 # YOLO 가중치 파일과 CFG 파일 로드
@@ -54,18 +55,23 @@ def process(image):
                 class_ids.append(class_id)
     foods = []
     indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
-    font = cv2.FONT_HERSHEY_PLAIN
+    sql = "select name from foods where id = %s"
+    food_names = []
+    font = ImageFont.truetype("fonts/gulim.ttc", 50)
+
     for i in range(len(boxes)):
         if i in indexes:
             x, y, w, h = boxes[i]
-            label = str(classes[class_ids[i]])
+            cursor.execute(sql, class_ids[i])
+            result = cursor.fetchall()
             color = colors[i]
             cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
-            cv2.putText(img, label, (x, y + 30), font, 3, color, 3)
+            img_pil = Image.fromarray(img)
+            draw = ImageDraw.Draw(img_pil)
+            draw.text((x, y+30), result[0][0], font=font, fill=(int(color[0]), int(color[1]), int(color[2])))
+            img = np.array(img_pil)
             foods.append(class_ids[i])
 
-    sql = "select name from foods where id = %s"
-    food_names = []
 
     for i in range(len(foods)):
         cursor.execute(sql, foods[i])
