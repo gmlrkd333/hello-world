@@ -272,8 +272,6 @@ def deleteFood(request):
         time = request.POST.get('time', 0)
         user = request.POST.get('id', '')
 
-        print(food_name, time, user)
-
         db = pymysql.connect(
             user='root',
             passwd='1234',
@@ -296,4 +294,38 @@ def deleteFood(request):
             return JsonResponse({"code": "0001"})
         else:
             return JsonResponse({"foods": [list(foods) for foods in result], "code": "0000"}, status=200)
+
+
+@csrf_exempt
+def usermod(request):
+    if request.method == 'POST':
+        id = request.POST.get('id', '')
+        sex = request.POST.get('sex', '')
+        height = request.POST.get('height', 0)
+        weight = request.POST.get('weight', 0)
+        age = request.POST.get('age', 0)
+
+        db = pymysql.connect(
+            user='root',
+            passwd='1234',
+            host='localhost',
+            db='food',
+            charset='utf8'
+        )
+        cursor = db.cursor()
+        sql = "update user set sex = %s, height = %s, weight = %s, age = %s where username = %s"
+        sql2 = "update user_food set sex = %s, height = %s, weight = %s, age = %s where user = %s"
+        try:
+            cursor.execute(sql, (sex, height, weight, age, id))
+            cursor.execute(sql2, (sex, height, weight, age, id))
+            db.commit()
+            db.close()
+            return JsonResponse({'code': '0000'}, status=200)
+
+        except:
+            db.commit()
+            db.close()
+            return JsonResponse({'code': '0001'}, status=200)
+
+
 
