@@ -1,4 +1,4 @@
-package com.example.test_project_1
+package com.example.test_project_1.login
 
 import android.Manifest
 import android.content.Intent
@@ -10,8 +10,10 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.test_project_1.login.Login
-import com.example.test_project_1.login.LoginService
+import com.example.test_project_1.join.JoinPage
+import com.example.test_project_1.MainActivity
+import com.example.test_project_1.R
+import com.example.test_project_1.Retro
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,7 +64,6 @@ class LoginPage : AppCompatActivity() {
                         intent.putExtra("weight", login?.weight)
                         intent.putExtra("height", login?.height)
                         intent.putExtra("age", login?.age)
-                        intent.putExtra("img", login?.img)
 
                         startActivity(intent)
                     }
