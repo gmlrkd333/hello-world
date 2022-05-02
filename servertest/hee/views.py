@@ -115,10 +115,9 @@ def food(request):
 @csrf_exempt
 def datainfo(request):
     if request.method == 'POST':
-        print(datamod.agecalavglist)
-        print(datamod.monthavgcal)
+        agecalavglist, monthavgcal = datamod.data()
 
-        return JsonResponse({'code': '0000', 'agecalavglist':datamod.agecalavglist, 'monthavgcal':datamod.monthavgcal}, status=200)
+        return JsonResponse({'code': '0000', 'agecalavglist': agecalavglist, 'monthavgcal': monthavgcal}, status=200)
 
 
 @csrf_exempt
@@ -128,7 +127,6 @@ def datainfo2(request):
         height = int(request.POST.get('height'))
         weight = int(request.POST.get('weight'))
         age = int(request.POST.get('age'))
-
 
         if sex == "  남":
             sex = 'M'
