@@ -10,6 +10,8 @@ import datamod
 import datetime
 
 
+# 회원가입
+# input: id, password, age, sex, height, weight
 @csrf_exempt
 def join(request):
     if request.method == 'POST':
@@ -24,6 +26,8 @@ def join(request):
         return JsonResponse({'code': '0000', 'msg': '회원가입 성공입니다.'}, status=200)
 
 
+# ID 중복 체크
+# input: id
 @csrf_exempt
 def check(request):
     if request.method == 'POST':
@@ -34,6 +38,8 @@ def check(request):
             return JsonResponse({'code': '0000'}, status=200)
 
 
+# 로그인
+# input: id, password
 @csrf_exempt
 def login(request):
     if request.method == 'POST':
@@ -44,6 +50,7 @@ def login(request):
 
         if result:
             print("성공")
+            print("ID : " + id)
 
             db = pymysql.connect(
                 user='root',
@@ -67,6 +74,8 @@ def login(request):
             return JsonResponse({'code': '1001', 'msg': '로그인실패입니다.'}, status=200)
 
 
+# 사진에서 음식 검출
+# input: 음식 사진 파일
 @csrf_exempt
 def calculate(request):
     if request.method == 'POST':
@@ -83,6 +92,8 @@ def calculate(request):
             return JsonResponse({'code': '0000', 'foods': foods, 'img': img},  status=200)
 
 
+# 달력에 표시할 음식 종류와 영양소
+# input: id, 음식 섭취 날짜+시간
 @csrf_exempt
 def food(request):
     if request.method == 'POST':
@@ -97,8 +108,14 @@ def food(request):
 
         time = request.POST.get('time', '')
         userid = request.POST.get('id', '')
+        sql = "select sum(calorie) from user_food where user = %s and tim like %s"
+        cursor.execute(sql, (userid, time[:-1] + "%"))
+        result = cursor.fetchall()
+        daycal = result[0][0]
+        print(result)
+
         sql = "select food_name, tim, calorie, carbo, protein, fat from user_food where user = %s and tim like %s"
-        cursor.execute(sql, (userid, "%"+time))
+        cursor.execute(sql, (userid, time))
         result = cursor.fetchall()
 
         db.commit()
@@ -109,9 +126,10 @@ def food(request):
         if len(result) == 0:
             return JsonResponse({"code": "0001"})
         else:
-            return JsonResponse({"foods": [list(foods) for foods in result], "code": "0000"}, status=200)
+            return JsonResponse({"foods": [list(foods) for foods in result], "daycal": daycal, "code": "0000"}, status=200)
 
 
+# 전체 사용자 연령별로 섭취한 칼로리 평균, 달마다 섭취한 칼로리 평균
 @csrf_exempt
 def datainfo(request):
     if request.method == 'POST':
@@ -120,6 +138,8 @@ def datainfo(request):
         return JsonResponse({'code': '0000', 'agecalavglist': agecalavglist, 'monthavgcal': monthavgcal}, status=200)
 
 
+# 나이, 성별, 키, 몸무게에 따라 많이 먹은 음식 출력
+# input: sex, height, weight, age
 @csrf_exempt
 def datainfo2(request):
     if request.method == 'POST':
@@ -176,6 +196,8 @@ def datainfo2(request):
         return JsonResponse({'code': '0000', 'info': sendfood}, status=200)
 
 
+# 사용자 정보 페이지에서 보여줄 정보
+# input: id
 @csrf_exempt
 def userinfo(request):
     if request.method == 'POST':
@@ -267,6 +289,8 @@ def userinfo(request):
         return JsonResponse({'code': '0000', 'day15': userdaycallist15, 'day30': userdaycallist30}, status=200)
 
 
+# 사진에서 검출, 수동 입력한 음식의 정보를 데이터베이스에 저장
+# input: 음식이름, 섭취 날짜+시간, 음식 중량, id, sex, height, weight, age
 @csrf_exempt
 def saveFood(request):
     if request.method == 'POST':
@@ -278,8 +302,6 @@ def saveFood(request):
         height = int(request.POST.get('height'))
         user_weight = int(request.POST.get('user_weight'))
         age = int(request.POST.get('age'))
-
-
 
         db = pymysql.connect(
             user='root',
@@ -306,6 +328,9 @@ def saveFood(request):
 
         return JsonResponse({'code': '0000'}, status=200)
 
+
+# 달력에서 선택한 음식을 데이터베이스에서 삭제
+# input: id, 음식 이름, 섭취 날짜+시간
 @csrf_exempt
 def deleteFood(request):
     if request.method == 'POST':
@@ -324,19 +349,14 @@ def deleteFood(request):
         sql = "delete from user_food where user = %s and tim = %s and food_name = %s"
         cursor.execute(sql, (user, time, food_name))
 
-        sql = "select food_name, tim, calorie, carbo, protein, fat from user_food where user = %s and tim like %s"
-        cursor.execute(sql, (user, "%" + time))
-        result = cursor.fetchall()
-
         db.commit()
         db.close()
 
-        if len(result) == 0:
-            return JsonResponse({"code": "0001"})
-        else:
-            return JsonResponse({"foods": [list(foods) for foods in result], "code": "0000"}, status=200)
+        return JsonResponse({"code": "0000"}, status=200)
 
 
+# 사용자 정보 수정
+# input: id, sex, height, weight, age
 @csrf_exempt
 def usermod(request):
     if request.method == 'POST':
