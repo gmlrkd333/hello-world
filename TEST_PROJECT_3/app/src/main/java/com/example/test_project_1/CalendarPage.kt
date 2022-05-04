@@ -84,6 +84,7 @@ class CalendarPage : Fragment() {
     var time: String = "0"
     lateinit var textId: String
     lateinit var mDatas: ArrayList<FoodModel>
+    lateinit var mDatas2: ArrayList<FoodModel>
 
     var retro = Retro()
     var retrofit = retro.retrofit
@@ -132,10 +133,13 @@ class CalendarPage : Fragment() {
                 var food = response.body() as Food
                 if(food.code == "0000"){
                     mDatas.clear()
-                    for (f in food.foods){
+                    for (f in food.timefoods){
                         mDatas.add(FoodModel( f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
                     }
-                    setbar(food.daycal)
+                    for (f in food.allfoods){
+                        mDatas2.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
+                    }
+                    setbar(mDatas2)
                 }
                 else{
                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -168,15 +172,18 @@ class CalendarPage : Fragment() {
                     if(food.code == "0000"){
                         Toast.makeText(getActivity(), "성공", Toast.LENGTH_SHORT).show()
                         mDatas.clear()
-                        for (f in food.foods){
+                        for (f in food.timefoods){
                             mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
                         }
-                        setbar(food.daycal)
+                        for (f in food.allfoods){
+                            mDatas2.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
+                        }
+                        setbar(mDatas2)
                     }
                     else{
                         Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
                         mDatas.clear()
-                        setbar(food.daycal)
+                        setbar(mDatas2)
                     }
                     val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
                     foodrecyview.adapter=recyadapter
@@ -246,10 +253,13 @@ class CalendarPage : Fragment() {
                             var food = response.body() as Food
                             if(food.code == "0000"){
                                 mDatas.clear()
-                                for (f in food.foods){
+                                for (f in food.timefoods){
                                     mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
                                 }
-                                setbar(food.daycal)
+                                for (f in food.allfoods){
+                                    mDatas2.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
+                                }
+                                setbar(mDatas2)
                             }
                             else{
                                 Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -275,10 +285,13 @@ class CalendarPage : Fragment() {
                             var food = response.body() as Food
                             if(food.code == "0000"){
                                 mDatas.clear()
-                                for (f in food.foods){
+                                for (f in food.timefoods){
                                     mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
                                 }
-                                setbar(food.daycal)
+                                for (f in food.allfoods){
+                                    mDatas2.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
+                                }
+                                setbar(mDatas2)
                             }
                             else{
                                 Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -303,10 +316,13 @@ class CalendarPage : Fragment() {
                             var food = response.body() as Food
                             if(food.code == "0000"){
                                 mDatas.clear()
-                                for (f in food.foods){
+                                for (f in food.timefoods){
                                     mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
                                 }
-                                setbar(food.daycal)
+                                for (f in food.allfoods){
+                                    mDatas2.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
+                                }
+                                setbar(mDatas2)
                             }
                             else{
                                 Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -363,10 +379,13 @@ class CalendarPage : Fragment() {
                             if(food.code == "0000"){
                                 Toast.makeText(getActivity(), "성공", Toast.LENGTH_SHORT).show()
                                 mDatas.clear()
-                                for (f in food.foods){
+                                for (f in food.timefoods){
                                     mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
                                 }
-                                setbar(food.daycal)
+                                for (f in food.allfoods){
+                                    mDatas2.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
+                                }
+                                setbar(mDatas2)
                             }
                             else{
                                 Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -428,8 +447,8 @@ class CalendarPage : Fragment() {
         return ratewidth
     }
 
-    fun setbar(daycal: Int) {
-        todayTotal = daycal
+    fun setbar(mDatas: ArrayList<FoodModel>) {
+        todayTotal = todaysum(mDatas, daynum)
 
         todaykcal.setText(todayTotal.toString())
         goalkcal.setText(maxkcal.toString())

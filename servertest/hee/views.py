@@ -108,25 +108,29 @@ def food(request):
 
         time = request.POST.get('time', '')
         userid = request.POST.get('id', '')
-        sql = "select sum(calorie) from user_food where user = %s and tim like %s"
-        cursor.execute(sql, (userid, time[:-1] + "%"))
-        result = cursor.fetchall()
-        daycal = result[0][0]
-        print(result)
 
         sql = "select food_name, tim, calorie, carbo, protein, fat from user_food where user = %s and tim like %s"
-        cursor.execute(sql, (userid, time))
+        cursor.execute(sql, (userid, time[:-1] + "%"))
         result = cursor.fetchall()
+
+        all_foods = [list(foods) for foods in result]
+        time_foods = []
+        i = 0
+        for food in all_foods:
+            if food[1][-1] == time[-1]:
+                time_foods.append(all_foods[i])
+            i += 1
 
         db.commit()
         db.close()
 
-        print(result)
+        print(all_foods)
+        print(time_foods)
 
         if len(result) == 0:
             return JsonResponse({"code": "0001"})
         else:
-            return JsonResponse({"foods": [list(foods) for foods in result], "daycal": daycal, "code": "0000"}, status=200)
+            return JsonResponse({"allfoods": all_foods, "timefoods": time_foods, "code": "0000"}, status=200)
 
 
 # 전체 사용자 연령별로 섭취한 칼로리 평균, 달마다 섭취한 칼로리 평균
