@@ -124,7 +124,7 @@ def food(request):
         print(result)
 
         if len(result) == 0:
-            return JsonResponse({"code": "0001"})
+            return JsonResponse({"code": "0001", "daycal": daycal}, status=200)
         else:
             return JsonResponse({"foods": [list(foods) for foods in result], "daycal": daycal, "code": "0000"}, status=200)
 
