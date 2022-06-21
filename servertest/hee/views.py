@@ -112,21 +112,21 @@ def food(request):
         cursor.execute(sql, (userid, time[:-1] + "%"))
         result = cursor.fetchall()
         daycal = result[0][0]
-        print(result)
+        print(userid, time)
 
-        sql = "select food_name, tim, calorie, carbo, protein, fat from user_food where user = %s and tim like %s"
+        sql = "select food_name, tim, calorie, carbo, protein, fat from " \
+              "user_food where user = %s and tim like %s"
         cursor.execute(sql, (userid, time))
         result = cursor.fetchall()
 
         db.commit()
         db.close()
 
-        print(result)
-
         if len(result) == 0:
             return JsonResponse({"code": "0001", "daycal": daycal}, status=200)
         else:
-            return JsonResponse({"foods": [list(foods) for foods in result], "daycal": daycal, "code": "0000"}, status=200)
+            return JsonResponse({"foods": [list(foods) for foods in result],
+                                 "daycal": daycal, "code": "0000"}, status=200)
 
 
 # 전체 사용자 연령별로 섭취한 칼로리 평균, 달마다 섭취한 칼로리 평균
@@ -303,6 +303,8 @@ def saveFood(request):
         user_weight = int(request.POST.get('user_weight'))
         age = int(request.POST.get('age'))
 
+        print(food_name, time, food_weight, user, sex, height, user_weight, age)
+
         db = pymysql.connect(
             user='root',
             passwd='1234',
@@ -310,6 +312,7 @@ def saveFood(request):
             db='food',
             charset='utf8'
         )
+
         cursor = db.cursor()
         sql = "select calorie, carbo, protein, fat, id from foods where name = %s"
         cursor.execute(sql, food_name)
@@ -319,10 +322,12 @@ def saveFood(request):
         protein = result[0][2]
         fat = result[0][3]
         id = result[0][4]
-        sql = "insert into user_food (user, food, food_name, quantity, tim, sex, weight, height, age, calorie, carbo, " \
+        sql = "insert into user_food (user, food, food_name, quantity, tim, sex," \
+              " weight, height, age, calorie, carbo, " \
                  "protein, fat) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, (user, id, food_name, food_weight, time, sex, user_weight, height, age,
-                                    calorie * food_weight, carbo * food_weight, protein * food_weight, fat * food_weight))
+        cursor.execute(sql, (user, id, food_name, food_weight, time, sex,
+                             user_weight, height, age, calorie * food_weight,
+                             carbo * food_weight, protein * food_weight, fat * food_weight))
         db.commit()
         db.close()
 

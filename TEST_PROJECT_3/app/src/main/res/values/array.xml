@@ -50,16 +50,17 @@
         <item>제육덮밥</item>
         <item>회덮밥</item>
         <item>돼지국밥</item>
-        <item>문어 초밥</item>
-        <item>새우 초밥</item>
-        <item>광어 초밥</item>
-        <item>연어 초밥</item>
-        <item>유부 초밥</item>
-        <item>장어 초밥</item>
-        <item>한치 초밥</item>
+        <item>소고기 무국</item>
+        <item>갈비</item>
+        <item>두부조림</item>
+        <item>계란말이</item>
+        <item>어묵볶음</item>
+        <item>소세지볶음</item>
+        <item>콩나물</item>
         <item>닭칼국수</item>
         <item>막국수</item>
         <item>비빔국수</item>
+        <item>치킨무</item>
     </string-array>
 
     <string-array name="dietweight">

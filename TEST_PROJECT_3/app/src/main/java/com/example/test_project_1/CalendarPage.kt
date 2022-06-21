@@ -138,8 +138,8 @@ class CalendarPage : Fragment() {
                     setbar(food.daycal)
                 }
                 else{
-                    Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
                     mDatas.clear()
+                    setbar(food.daycal)
                 }
 
                 val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
@@ -166,7 +166,6 @@ class CalendarPage : Fragment() {
                 override fun onResponse(call: Call<Food>, response: Response<Food>) {
                     var food = response.body() as Food
                     if(food.code == "0000"){
-                        Toast.makeText(getActivity(), "성공", Toast.LENGTH_SHORT).show()
                         mDatas.clear()
                         for (f in food.foods){
                             mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
@@ -174,7 +173,6 @@ class CalendarPage : Fragment() {
                         setbar(food.daycal)
                     }
                     else{
-                        Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
                         mDatas.clear()
                         setbar(food.daycal)
                     }
@@ -252,8 +250,8 @@ class CalendarPage : Fragment() {
                                 setbar(food.daycal)
                             }
                             else{
-                                Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
                                 mDatas.clear()
+                                setbar(food.daycal)
                             }
 
                             val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
@@ -281,8 +279,8 @@ class CalendarPage : Fragment() {
                                 setbar(food.daycal)
                             }
                             else{
-                                Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
                                 mDatas.clear()
+                                setbar(food.daycal)
                             }
 
                             val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
@@ -309,8 +307,8 @@ class CalendarPage : Fragment() {
                                 setbar(food.daycal)
                             }
                             else{
-                                Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
                                 mDatas.clear()
+                                setbar(food.daycal)
                             }
 
                             val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
@@ -328,6 +326,7 @@ class CalendarPage : Fragment() {
             }
         }
     }
+    
 
     private fun setUpClickListener(calmonth: TextView) {
         icnext.setOnClickListener {
@@ -361,7 +360,6 @@ class CalendarPage : Fragment() {
                         override fun onResponse(call: Call<Food>, response: Response<Food>) {
                             var food = response.body() as Food
                             if(food.code == "0000"){
-                                Toast.makeText(getActivity(), "성공", Toast.LENGTH_SHORT).show()
                                 mDatas.clear()
                                 for (f in food.foods){
                                     mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
@@ -369,8 +367,8 @@ class CalendarPage : Fragment() {
                                 setbar(food.daycal)
                             }
                             else{
-                                Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
                                 mDatas.clear()
+                                setbar(food.daycal)
                             }
                             val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
                             foodrecyview.adapter=recyadapter
