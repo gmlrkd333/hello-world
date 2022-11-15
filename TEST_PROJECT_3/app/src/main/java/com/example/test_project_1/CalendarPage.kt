@@ -127,7 +127,7 @@ class CalendarPage : Fragment() {
         dinner = view.findViewById(R.id.dinner)
         meal_time = view.findViewById(R.id.meal_time)
 
-        getFoods(today+time, textId, mDatas)
+        displayCalendar(today+time, textId, mDatas)
 
         meal_time.setOnCheckedChangeListener { radioGroup, i ->
             when(i){
@@ -135,7 +135,7 @@ class CalendarPage : Fragment() {
                 R.id.lunch -> time = "1"
                 R.id.dinner -> time = "2"
             }
-            getFoods(selectDay+time, textId, mDatas)
+            displayCalendar(selectDay+time, textId, mDatas)
         }
 
         setUpAdapter(mDatas, calrecyview)
@@ -189,21 +189,21 @@ class CalendarPage : Fragment() {
         if(resultCode == Activity.RESULT_OK){
             when(requestCode){
                 REQUEST_GET_IMAGE -> {
-                    getFoods(selectDay+time, textId, mDatas)
+                    displayCalendar(selectDay+time, textId, mDatas)
                 }
 
                 REQUEST_CAMERA -> {
-                    getFoods(selectDay+time, textId, mDatas)
+                    displayCalendar(selectDay+time, textId, mDatas)
                 }
                 REQUEST_ADD -> {
-                    getFoods(selectDay+time, textId, mDatas)
+                    displayCalendar(selectDay+time, textId, mDatas)
 
                 }
             }
         }
     }
 
-    private fun getFoods(time: String, id: String, foodList: ArrayList<FoodModel>){
+    private fun displayCalendar(time: String, id: String, foodList: ArrayList<FoodModel>){
         foodService.searchFood(time, id).enqueue(object: Callback<Food>{
             override fun onResponse(call: Call<Food>, response: Response<Food>) {
                 var food = response.body() as Food
@@ -260,7 +260,7 @@ class CalendarPage : Fragment() {
                     goalkcal.setText(daynum.toString())
 
                     //test
-                    getFoods(selectDay+time, textId, mDatas)
+                    displayCalendar(selectDay+time, textId, mDatas)
                 }
             }
             adapter.setData(calList)
